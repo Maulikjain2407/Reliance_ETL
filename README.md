@@ -692,6 +692,11 @@ The dashboard will load the JSON files from:
 ```text
 dashboard/data/
 ```
+## Hosted Dashboard (Netlify)
+ 
+As an alternative to running the dashboard locally, a deployed copy is also available online:
+ 
+**[https://reliance-etl.netlify.app/](https://reliance-etl.netlify.app/)**
 
 ---
 
