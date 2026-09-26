@@ -1,0 +1,489 @@
+/* =========================================================================
+   DESIGN TOKENS
+   A clearly dark, high-contrast financial-terminal look: a near-black
+   sidebar spine and a dark content area with slightly lighter card
+   surfaces. Numbers are set in monospace so digits line up like they
+   would in a printed financial statement.
+   ========================================================================= */
+:root {
+  /* Colors — a clearly dark, high-contrast theme. The sidebar is a
+     slightly darker shade than the main background, so it reads as a
+     distinct panel rather than blending into the page. */
+  --color-bg: #0e1116;
+  --color-surface: #161b22;
+  --color-surface-alt: rgba(255, 255, 255, 0.035);
+  --color-border: #2a313c;
+  --color-border-strong: #3d4550;
+  --color-text: #e6e9ee;
+  --color-text-muted: #9aa4b2;
+
+  --color-accent: #2fae87;
+  --color-accent-soft: rgba(47, 174, 135, 0.14);
+  --color-positive: #2fae87;
+  --color-negative: #e0665a;
+  --color-warning: #d9a441;
+
+  --color-sidebar-bg: #090c10;
+  --color-sidebar-text: #aab3c0;
+  --color-sidebar-text-muted: #626b76;
+  --color-sidebar-accent: #2fae87;
+
+  /* Typography */
+  --font-ui: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  /* Layout */
+  --sidebar-width: 240px;
+  --radius-card: 3px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+  margin: 0 0 0.35em 0;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 1.25rem;
+}
+h2 {
+  font-size: 1.5rem;
+}
+h3 {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  text-transform: none;
+}
+
+p {
+  margin: 0 0 0.75em 0;
+}
+
+/* Visible focus outline everywhere, for keyboard users */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--color-accent);
+  color: #fff;
+  padding: 0.6em 1em;
+  z-index: 100;
+}
+.skip-link:focus {
+  left: 0.5em;
+  top: 0.5em;
+}
+
+/* =========================================================================
+   APP LAYOUT
+   ========================================================================= */
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  background: var(--color-sidebar-bg);
+  color: var(--color-sidebar-text);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.brand-mark {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid var(--color-sidebar-accent);
+  color: var(--color-sidebar-accent);
+  padding: 0.35em 0.5em;
+  letter-spacing: 0.04em;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.brand-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.brand-subtitle {
+  font-size: 0.72rem;
+  color: var(--color-sidebar-text-muted);
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.nav-link {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  color: var(--color-sidebar-text);
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  padding: 0.55em 0.75em;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+}
+
+.nav-link.is-active {
+  background: rgba(47, 174, 135, 0.14);
+  border-left-color: var(--color-sidebar-accent);
+  color: #fff;
+  font-weight: 500;
+}
+
+.sidebar-footnote {
+  margin-top: auto;
+  font-size: 0.72rem;
+  color: var(--color-sidebar-text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+/* ---------- Main content ---------- */
+.main {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  padding: 1.75rem 2.25rem 4rem;
+  max-width: 1100px;
+}
+
+.topbar {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.topbar-meta {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.topbar-meta strong {
+  font-family: var(--font-mono);
+  color: var(--color-text);
+}
+
+.panel-intro {
+  margin-bottom: 1.5rem;
+}
+
+.panel-lede {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
+
+.panel-description {
+  color: var(--color-text-muted);
+  max-width: 62ch;
+  font-size: 0.92rem;
+}
+
+/* =========================================================================
+   SUMMARY CARDS
+   ========================================================================= */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 1.75rem;
+}
+
+.summary-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 1rem 1.1rem;
+}
+
+.summary-card-label {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  margin: 0 0 0.35em 0;
+}
+
+.summary-card-value {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 0;
+  color: var(--color-text);
+}
+
+/* =========================================================================
+   CHART CARDS
+   ========================================================================= */
+.chart-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 1.1rem 1.25rem 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.chart-card h3 {
+  margin-bottom: 0.75em;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 260px;
+}
+
+.chart-card.is-hidden {
+  display: none;
+}
+
+/* =========================================================================
+   STATUS CARD (data quality)
+   ========================================================================= */
+.status-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 1.1rem 1.25rem;
+}
+
+.status-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.status-list li {
+  padding: 0.4em 0.6em;
+  border-left: 3px solid var(--color-border-strong);
+}
+
+.status-list .status-ok {
+  border-left-color: var(--color-positive);
+}
+
+.status-list .status-fail {
+  border-left-color: var(--color-negative);
+  color: var(--color-negative);
+}
+
+/* =========================================================================
+   FINANCIAL TABLES
+   ========================================================================= */
+.table-container {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.financial-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.85rem;
+}
+
+.financial-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--color-surface);
+  text-align: right;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  padding: 0.6em 0.9em;
+  border-bottom: 1px solid var(--color-border-strong);
+  white-space: nowrap;
+}
+
+.financial-table td,
+.financial-table th.metric-column {
+  padding: 0.5em 0.9em;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.financial-table tbody tr:nth-child(even) {
+  background: var(--color-surface-alt);
+}
+
+.financial-table .metric-column {
+  text-align: left;
+  font-weight: 400;
+  position: sticky;
+  left: 0;
+  background: var(--color-surface);
+  z-index: 1;
+}
+
+.financial-table thead th.metric-column {
+  text-align: left;
+  z-index: 2;
+}
+
+.financial-table .numeric-cell {
+  font-family: var(--font-mono);
+  text-align: right;
+  color: var(--color-text);
+}
+
+.financial-table .status-row .metric-column,
+.financial-table .status-row .numeric-cell {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.status-present {
+  color: var(--color-positive) !important;
+  font-style: normal !important;
+}
+
+.status-missing {
+  color: var(--color-text-muted) !important;
+}
+
+.status-warning {
+  color: var(--color-warning) !important;
+  font-style: normal !important;
+}
+
+/* =========================================================================
+   MESSAGES (loading / error / empty)
+   ========================================================================= */
+.loading-message,
+.error-message,
+.empty-message {
+  padding: 1rem 1.1rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.error-message {
+  color: var(--color-negative);
+}
+
+/* =========================================================================
+   RESPONSIVE
+   ========================================================================= */
+@media (max-width: 880px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    overflow-x: auto;
+  }
+
+  .brand {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    margin-right: 1rem;
+  }
+
+  .nav-list {
+    flex-direction: row;
+  }
+
+  .sidebar-footnote {
+    display: none;
+  }
+
+  .app {
+    flex-direction: column;
+  }
+
+  .main {
+    margin-left: 0;
+    padding: 1.5rem 1.25rem 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .summary-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  h1 {
+    font-size: 1.1rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+}
